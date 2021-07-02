@@ -1,0 +1,61 @@
+plugins {
+  id 'com.android.application'
+  id 'kotlin-android'
+  id 'kotlin-kapt'
+  id 'dagger.hilt.android.plugin'
+}
+
+android {
+
+  compileSdkVersion rootProject.ext.COMPILE_SDK
+
+  defaultConfig {
+    applicationId "com.jio.tesseract.launcher"
+    minSdkVersion rootProject.ext.MIN_SDK
+    targetSdkVersion rootProject.ext.TARGET_SDK
+    versionCode rootProject.ext.VERSION_CODE
+    versionName rootProject.ext.VERSION_NAME
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+  kotlinOptions {
+    jvmTarget = '1.8'
+  }
+
+  buildFeatures {
+    viewBinding true
+  }
+
+  dataBinding {
+    enabled = true
+  }
+}
+
+dependencies {
+
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "androidx.core:core-ktx:$CORE_KTX"
+  implementation "androidx.appcompat:appcompat:$APP_COMPAT"
+  implementation "com.google.android.material:material:$MATERIAL"
+  implementation "androidx.constraintlayout:constraintlayout:$CONSTRAINT_LAYOUT"
+  implementation "androidx.lifecycle:lifecycle-livedata-ktx:$LIFECYCLE"
+  implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$LIFECYCLE"
+  implementation "androidx.activity:activity-ktx:$ACTIVITY_KTX"
+  implementation "com.google.dagger:hilt-android:$HILT"
+  kapt "com.google.dagger:hilt-android-compiler:$HILT"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$COROUTINE"
+
+  implementation "androidx.cardview:cardview:$CARDVIEW"
+  implementation "androidx.recyclerview:recyclerview:$RECYCLERVIEW"
+
+  implementation project(':LauncherSdk')
+}

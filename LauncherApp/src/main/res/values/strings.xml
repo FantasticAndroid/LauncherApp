@@ -1,0 +1,9 @@
+<resources>
+  <string name="app_name">LauncherApp</string>
+  <string name="application_name">App name: %s</string>
+  <string name="version_code">Version code: %d</string>
+  <string name="version_name">Version name: %s</string>
+  <string name="package_name">Package: %s</string>
+  <string name="main_class_name">Main Activity: %s</string>
+  <string name="search">Search</string>
+</resources>
