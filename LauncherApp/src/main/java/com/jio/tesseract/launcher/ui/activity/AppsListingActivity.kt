@@ -31,11 +31,12 @@ private const val TAG = "AppsListingActivity"
 
 /**
  * Launcher Activity with <category android:name="android.intent.category.HOME" />
-<category android:name="android.intent.category.DEFAULT" /> so can be replaceable with device default launcher
+ * <category android:name="android.intent.category.DEFAULT" /> so can be replaceable with device default launcher
  * @property binding ActivityAppsListBinding
  * @property launcherViewModel LauncherViewModel
  * @property appsListAdapter AppsListAdapter
  * @property searchItem MenuItem?
+ * @property appEventCallback AppEventCallback
  */
 @AndroidEntryPoint
 class AppsListingActivity : BaseActivity() {
