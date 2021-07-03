@@ -1,4 +1,4 @@
-package com.jio.tesseract.launchersdk
+package com.jio.tesseract.launchersdk.base
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,13 +7,13 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.jio.tesseract.launchersdk.AppStatus
 
+private const val TAG = "LauncherBaseActivity"
 /**
  * abstract Activity for Launcher app for SDK >= 8
  * @property appStatusReceiver BroadcastReceiver
  */
-private const val TAG = "LauncherBaseActivity"
-
 abstract class LauncherBaseActivity : AppCompatActivity() {
 
     abstract fun onAppStatusChanged(packageName: String, appStatus: AppStatus)

@@ -22,12 +22,12 @@ import com.jio.tesseract.launchersdk.AppInfo
 import com.jio.tesseract.launchersdk.AppStatus
 import com.jio.tesseract.launchersdk.AppStatus.ADDED
 import com.jio.tesseract.launchersdk.AppStatus.REMOVED
-import com.jio.tesseract.launchersdk.LauncherBaseActivity
+import com.jio.tesseract.launchersdk.base.LauncherBaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-private const val TAG = "AppsListingActivity1"
+private const val TAG = "AppsListingActivity"
 
 /**
  * Launcher Activity with <category android:name="android.intent.category.HOME" />
@@ -38,7 +38,7 @@ private const val TAG = "AppsListingActivity1"
  * @property searchItem MenuItem?
  */
 @AndroidEntryPoint
-class AppsListingActivity1 : LauncherBaseActivity() {
+class AppsListingActivity : LauncherBaseActivity() {
 
     private lateinit var binding: ActivityApplistBinding
     private val launcherViewModel: LauncherViewModel by viewModels()

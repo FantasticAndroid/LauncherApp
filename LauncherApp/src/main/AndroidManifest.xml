@@ -10,17 +10,8 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:supportsRtl="true"
       android:theme="@style/Theme.LauncherApp">
-    <activity android:name=".ui.activity.AppsListingActivity1" android:label="@string/launcher_1">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-
-        <category android:name="android.intent.category.LAUNCHER" />
-        <category android:name="android.intent.category.HOME" />
-        <category android:name="android.intent.category.DEFAULT" />
-      </intent-filter>
-    </activity>
-
-    <activity android:name=".ui.activity.AppsListingActivity2" android:label="@string/launcher_2">
+    <activity
+        android:name=".ui.activity.AppsListingActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 

@@ -1,7 +1,5 @@
 <resources>
   <string name="app_name">LauncherApp</string>
-  <string name="launcher_1">LauncherAppN</string>
-  <string name="launcher_2">LauncherAppO</string>
   <string name="application_name">App name: %s</string>
   <string name="version_code">Version code: %d</string>
   <string name="version_name">Version name: %s</string>

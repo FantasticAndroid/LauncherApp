@@ -10,3 +10,9 @@ data class AppInfo(
     val versionName: String,
     val appDrawable: Drawable
 )
+
+enum class AppStatus {
+    NA,
+    ADDED,
+    REMOVED
+}
