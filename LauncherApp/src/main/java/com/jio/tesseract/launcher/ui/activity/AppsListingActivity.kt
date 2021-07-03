@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.MenuItemCompat
@@ -16,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jio.tesseract.launcher.R
+import com.jio.tesseract.launcher.base.BaseActivity
 import com.jio.tesseract.launcher.databinding.ActivityAppsListBinding
 import com.jio.tesseract.launcher.ui.adapter.AppsListAdapter
 import com.jio.tesseract.launcher.viewmodel.LauncherViewModel
@@ -38,7 +38,7 @@ private const val TAG = "AppsListingActivity"
  * @property searchItem MenuItem?
  */
 @AndroidEntryPoint
-class AppsListingActivity : AppCompatActivity() {
+class AppsListingActivity : BaseActivity() {
 
     private lateinit var binding: ActivityAppsListBinding
     private val launcherViewModel: LauncherViewModel by viewModels()
