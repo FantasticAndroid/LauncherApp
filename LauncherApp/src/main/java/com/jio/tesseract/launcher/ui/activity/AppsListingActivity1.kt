@@ -1,9 +1,6 @@
 package com.jio.tesseract.launcher.ui.activity
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -15,25 +12,22 @@ import androidx.core.view.MenuItemCompat
 import androidx.core.view.MenuItemCompat.OnActionExpandListener
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jio.tesseract.launcher.R
-import com.jio.tesseract.launcher.base.BaseActivity
 import com.jio.tesseract.launcher.databinding.ActivityApplistBinding
 import com.jio.tesseract.launcher.ui.adapter.AppsListAdapter
 import com.jio.tesseract.launcher.viewmodel.LauncherViewModel
 import com.jio.tesseract.launchersdk.AppInfo
 import com.jio.tesseract.launchersdk.AppStatus
 import com.jio.tesseract.launchersdk.AppStatus.ADDED
-import com.jio.tesseract.launchersdk.AppStatus.NA
 import com.jio.tesseract.launchersdk.AppStatus.REMOVED
-import com.jio.tesseract.launchersdk.Constant
+import com.jio.tesseract.launchersdk.LauncherBaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-private const val TAG = "AppsListingActivity"
+private const val TAG = "AppsListingActivity1"
 
 /**
  * Launcher Activity with <category android:name="android.intent.category.HOME" />
@@ -42,10 +36,9 @@ private const val TAG = "AppsListingActivity"
  * @property launcherViewModel LauncherViewModel
  * @property appsListAdapter AppsListAdapter
  * @property searchItem MenuItem?
- * @property appStatusUpdateReceiver <no name provided>
  */
 @AndroidEntryPoint
-class AppsListingActivity : BaseActivity() {
+class AppsListingActivity1 : LauncherBaseActivity() {
 
     private lateinit var binding: ActivityApplistBinding
     private val launcherViewModel: LauncherViewModel by viewModels()
@@ -58,7 +51,6 @@ class AppsListingActivity : BaseActivity() {
         setContentView(binding.root)
         initUi()
         readAppsListFromDevice()
-        registerAppStatusReceiver()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -80,7 +72,7 @@ class AppsListingActivity : BaseActivity() {
                 query?.apply {
                     appsListAdapter.appInfoOrgList?.let { appsList ->
                         val filteredAppsList: List<AppInfo> = appsList.filter { appInfo ->
-                            appInfo.appName.lowercase().startsWith(this.lowercase())
+                            appInfo.appName.startsWith(this, true)
                         }
                         appsListAdapter.submitList(filteredAppsList)
                     }
@@ -101,7 +93,7 @@ class AppsListingActivity : BaseActivity() {
         }
 
         binding.appsListRv.apply {
-            layoutManager = LinearLayoutManager(launcherApp, RecyclerView.VERTICAL, false)
+            layoutManager = LinearLayoutManager(applicationContext, RecyclerView.VERTICAL, false)
             adapter = appsListAdapter
         }
     }
@@ -130,35 +122,12 @@ class AppsListingActivity : BaseActivity() {
     }
 
     /**
-     * Register local broadcast to receive app Aad/Remove Status
-     */
-    private fun registerAppStatusReceiver() {
-        val filter = IntentFilter()
-        filter.addAction(Constant.ACTION_BROADCAST_APP_STATUS)
-        LocalBroadcastManager.getInstance(this).registerReceiver(appStatusUpdateReceiver, filter)
-    }
-
-    /**
-     * BroadcastReceiver, to receive Local Broadcast Intent with packageName and app status
-     */
-    private val appStatusUpdateReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent?) {
-            Log.d(TAG, "appStatusUpdateReceiver: onReceive")
-            intent?.extras?.let {
-                val packageName = it.getString(Constant.KEY_BUNDLE_APP_PACKAGE_NAME, "")
-                val appStatus = (it.getSerializable(Constant.KEY_BUNDLE_APP_STATUS) as AppStatus?) ?: NA
-
-                updateLauncherList(packageName, appStatus)
-            }
-        }
-    }
-
-    /**
-     * To Update launcher List with newly added or removed app
+     *
      * @param packageName String
      * @param appStatus AppStatus
      */
-    private fun updateLauncherList(packageName: String, appStatus: AppStatus) {
+    override fun onAppStatusChanged(packageName: String, appStatus: AppStatus) {
+        Log.d(TAG, "onAppStatusChanged: packageName: $packageName, appStatus: ${appStatus.name}")
         lifecycleScope.launch(Dispatchers.Main) {
             searchItem?.collapseActionView()
             appsListAdapter.reSubmitOrgList()
@@ -167,23 +136,32 @@ class AppsListingActivity : BaseActivity() {
                 val appsList = appsListAdapter.appInfoOrgList!!
                 when (appStatus) {
                     REMOVED -> {
-                        val index = appsList.indexOfFirst {
+                        appsList.indexOfFirst {
                             it.packageName == packageName
+                        }.takeIf {
+                            it >= 0
+                        }?.let { index ->
+                            appsList.removeAt(index)
+                            appsListAdapter.notifyItemRemoved(index)
+                            //appsListAdapter.notifyDataSetChanged()
+                            launcherViewModel.updateAppsList(appsList)
                         }
-                        appsList.removeAt(index)
-                        appsListAdapter.notifyItemRemoved(index)
-                        //appsListAdapter.notifyDataSetChanged()
-                        launcherViewModel.updateAppsList(appsList)
                     }
                     ADDED -> {
-                        launcherViewModel.getAppInfoFromPackage(packageName)?.let { appInfo ->
-                            appsList.add(appInfo)
-                            appsListAdapter.notifyItemInserted(appsList.size - 1)
-                            appsList.sortBy {
-                                it.appName
+                        appsList.indexOfFirst {
+                            it.packageName == packageName
+                        }.takeIf {
+                            it == -1
+                        }?.apply {
+                            launcherViewModel.getAppInfoFromPackage(packageName)?.let { appInfo ->
+                                appsList.add(appInfo)
+                                appsListAdapter.notifyItemInserted(appsList.size - 1)
+                                appsList.sortBy {
+                                    it.appName
+                                }
+                                appsListAdapter.notifyDataSetChanged()
+                                launcherViewModel.updateAppsList(appsList)
                             }
-                            appsListAdapter.notifyDataSetChanged()
-                            launcherViewModel.updateAppsList(appsList)
                         }
                     }
                 }
@@ -200,7 +178,6 @@ class AppsListingActivity : BaseActivity() {
 
     override fun onDestroy() {
         viewModelStore.clear()
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(appStatusUpdateReceiver)
         super.onDestroy()
     }
 }

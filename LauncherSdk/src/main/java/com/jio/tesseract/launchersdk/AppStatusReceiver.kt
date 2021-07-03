@@ -17,7 +17,7 @@ class AppStatusReceiver : BroadcastReceiver() {
                     putExtra(Constant.KEY_BUNDLE_APP_PACKAGE_NAME, packageName)
                     val appStatus = when (intent.action) {
                         Intent.ACTION_PACKAGE_ADDED -> AppStatus.ADDED
-                        Intent.ACTION_PACKAGE_REMOVED -> AppStatus.REMOVED
+                        Intent.ACTION_PACKAGE_FULLY_REMOVED -> AppStatus.REMOVED
                         else -> AppStatus.NA
                     }
                     putExtra(Constant.KEY_BUNDLE_APP_STATUS, appStatus)

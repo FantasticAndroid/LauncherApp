@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
  * @property context Context
  * @constructor
  */
-@ViewModelScoped    // This scope can be removed also if client app does not deal with MVVM pattern.
+@ViewModelScoped    // This scope can be removed if client app does not deal with MVVM pattern or changed if accessed by other than ViewModel.
 class LauncherManager @Inject constructor(@ApplicationContext private val context: Context) {
 
     /**

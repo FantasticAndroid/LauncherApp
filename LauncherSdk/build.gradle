@@ -44,4 +44,5 @@ dependencies {
   implementation "com.google.dagger:hilt-android:$HILT"
   kapt "com.google.dagger:hilt-android-compiler:$HILT"
   implementation "androidx.localbroadcastmanager:localbroadcastmanager:$LOCAL_BROADCAST"
+  implementation "androidx.lifecycle:lifecycle-runtime-ktx:$LIFECYCLE"
 }
