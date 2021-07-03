@@ -14,7 +14,7 @@ import com.jio.tesseract.launchersdk.AppInfo
  * @property listener Function1<[@kotlin.ParameterName] AppInfo, Unit>
  * @constructor
  */
-class AppsListAdapter(private val listener: (position: AppInfo) -> Unit) : ListAdapter<AppInfo, AppInfoHolder>(
+class AppsListAdapter(private val listener: (appInfo: AppInfo) -> Unit) : ListAdapter<AppInfo, AppInfoHolder>(
     ITEM_COMPARATOR
 ) {
     var appInfoOrgList: MutableList<AppInfo>? = null

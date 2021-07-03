@@ -8,3 +8,8 @@ import androidx.databinding.BindingAdapter
 fun ImageView.setImageDrawable(drawable: Drawable?) {
     setImageDrawable(drawable)
 }
+
+/**
+ * To forcefully apply all cases in When Block.
+ */
+inline val <T> T.exhaustive get() = this
